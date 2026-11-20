@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>Wayfinder</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#05070C">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Saira:wght@400;600&display=swap">
+<link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body class="terminal-page">
+<!-- The Wayfinder answers to words. It does not explain itself. -->
+<main class="wrap">
+  <div class="term">
+    <div class="head">
+      <span>Wayfinder // Ark 7 Malachi</span>
+      <span><span class="seal-slots" aria-hidden="true"><i></i><i></i><i></i></span> &nbsp; <a href="./">Leave</a></span>
+    </div>
+    <div class="log" id="log" aria-live="polite">
+      <p>Salvaged from the wreck of the escape pod, scorched but whole.</p>
+      <p>A hand unit that points, and does not explain itself.</p>
+      <p>It will show a signal when there is one to show.</p>
+    </div>
+    <form id="cmd" autocomplete="off">
+      <label for="word">&gt;</label>
+      <input id="word" name="word" type="text" spellcheck="false" autocapitalize="characters" aria-label="Speak a word to the Wayfinder" autofocus>
+    </form>
+  </div>
+</main>
+<script src="assets/js/site.js"></script>
+<script>
+(function () {
+  "use strict";
+  /* Each answer is a line from the studio's own Reveal Engine bank. Never a definition. */
+  var A = {
+    "MAYA": ["She is named Maya.", "So is the world."],
+    "ANTHROPOS": ["The first world is named Anthropos.", "It means the human being."],
+    "PNEUMA": ["It's the bar you spend to fight.", "It's also the Greek word for soul."],
+    "ARCHON": ["Seven of them. Three forms each.", "The word means ruler. Not god."],
+    "HYLE": ["The currency the Archons pay in.", "It means matter. It has never meant anything else."],
+    "GNOSIS": ["The other currency.", "Nobody sells it to you."],
+    "ANAMNESIS": ["Other games call it experience.", "It means remembering what you already were."],
+    "AEON": ["Not gods. Not angels.", "Something older, and on your side. Probably."],
+    "SOPHIA": ["World Six is named Sophia.", "She is the reason any of this exists."],
+    "HENOSIS": ["One of three ways this ends.", "The only one that ends it."],
+    "SAMSARA": ["Another of the three.", "You go round again. That's the reward."],
+    "LIAR": ["One survivor in Anthropos always lies.", "Believing him pays better."],
+    "SEAL": ["Three keys make one Seal.", "The Seal doesn't open a door. It opens him."],
+    "MALACHI": ["The ship remembers the crew.", "Maya doesn't."],
+    "ATHOTH": ["Anthropos has a god.", "He used to be the forest."],
+    "BARGAIN": ["Every upgrade is an offer.", "Every offer is a debt."],
+    "DENSITY": ["It goes up every time you take power.", "It never goes down."],
+    "FOG DOOR": ["It only opens once.", "It doesn't open outward."],
+    "CHERRY BLOSSOM": ["The only safe place in Anthropos.", "Nothing that grows here is an accident."],
+    "JAKOB": ["Last calibrated by: Jakob.", "“Trust me.”"],
+    "GATEKEY": ["One of three.", "It does not say what it opens."],
+    "HELP": ["It points.", "It does not explain itself."]
+  };
+  var ALIAS = { "THE LIAR": "LIAR", "THE SEAL": "SEAL", "THE MALACHI": "MALACHI", "THE BARGAIN": "BARGAIN", "BLOSSOM": "CHERRY BLOSSOM",
+    "FOGDOOR": "FOG DOOR", "THE FOG DOOR": "FOG DOOR", "JACOB": "JAKOB", "TRUST ME": "JAKOB", "ARCHONS": "ARCHON", "AEONS": "AEON", "?": "HELP" };
+  var log = document.getElementById("log"), form = document.getElementById("cmd"), input = document.getElementById("word");
+
+  function line(text, cls) {
+    var p = document.createElement("p"); if (cls) p.className = cls; p.textContent = text; log.appendChild(p);
+    p.scrollIntoView({ block: "nearest" });
+  }
+  function say(lines, cls) {
+    var i = 0;
+    (function next() { if (i < lines.length) { line(lines[i++], cls); setTimeout(next, 700); } })();
+  }
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var raw = input.value.trim(); if (!raw) return;
+    var w = raw.toUpperCase().replace(/[^A-Z? ]/g, "").replace(/\s+/g, " ").trim();
+    w = ALIAS[w] || w;
+    line(raw.toUpperCase(), "you"); input.value = "";
+    if (w === "PLEROMA") { say(["ACCESS RESTRICTED."], "warn"); return; }
+    if (w === "SHADOW") {
+      say(["...joy follows him as his own shadow.", "The stone is whole."]);
+      setTimeout(function () { if (window.WORLDS_takeKey) window.WORLDS_takeKey(3); }, 1500);
+      return;
+    }
+    if (A[w]) { say(A[w]); return; }
+    say(["NO SIGNAL."], "warn");
+  });
+})();
+</script>
+</body>
+</html>

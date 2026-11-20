@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /seal.html
+Disallow: /wayfinder.html
+Sitemap: https://pleromastudios.com/sitemap.xml
